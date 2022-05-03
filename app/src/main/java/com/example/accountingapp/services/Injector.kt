@@ -2,12 +2,14 @@ package com.example.accountingapp.services
 
 import android.content.Context
 import com.example.accountingapp.store.database.AppDatabase
+import com.example.accountingapp.ui.add.RecordViewModelFactory
 import com.example.accountingapp.ui.main.MainViewModelFactory
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 interface ViewModelFactoryProvider {
     @OptIn(ExperimentalCoroutinesApi::class, kotlinx.coroutines.FlowPreview::class)
     fun provideMainViewModelFactory(context: Context): MainViewModelFactory
+    fun provideAddRecordViewModelFactory(context: Context): RecordViewModelFactory
 }
 
 val Injector: ViewModelFactoryProvider
@@ -32,4 +34,11 @@ private object DefaultViewModelProvider: ViewModelFactoryProvider {
         val repository = getBudgetRepository(context)
         return MainViewModelFactory(repository)
     }
+
+    override fun provideAddRecordViewModelFactory(context: Context): RecordViewModelFactory {
+        val repository = getBudgetRepository(context)
+        return RecordViewModelFactory(repository)
+    }
+
+
 }

@@ -11,7 +11,8 @@ data class Record(
     @PrimaryKey @ColumnInfo(name = "id") val recordId: UUID = UUID.randomUUID(),
     val amount: Double,
     val description: String?,
-    val creationDate: Long?
+    val creationDate: Date?,
+    val editDate: Date?
 )
 
 /** Record database DAO
@@ -22,8 +23,11 @@ interface RecordsDao {
     fun getRecords(): Flow<List<Record>>
 
     @Insert(onConflict = OnConflictStrategy.ABORT)
-    suspend fun add(records: Record)
+    suspend fun add(record: Record): Long
 
     @Update
-    suspend fun update(record: Record)
+    suspend fun update(record: Record): Int
+
+    @Query("Select * from records where id = :id limit 1")
+    fun query(id: UUID): Record?
 }

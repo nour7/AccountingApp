@@ -5,13 +5,22 @@ buildscript {
         def room_version = "2.4.1"
         def fragment_version = '1.1.0'
 
+
         database_libraries = [
                 "androidx.room:room-ktx:$room_version"
         ]
         fragment_libraries = [
-                "androidx.fragment:fragment-ktx:$fragment_version",
+                "androidx.fragment:fragment-ktx:$fragment_version"
+        ]
+        libraries_kapt = [
+                "androidx.room:room-compiler:$room_version"
         ]
 
+    }
+
+    dependencies {
+        def nav_version = "2.4.2"
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:$nav_version"
     }
 }
 plugins {
