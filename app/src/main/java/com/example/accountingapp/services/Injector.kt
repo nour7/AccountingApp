@@ -10,7 +10,7 @@ interface ViewModelFactoryProvider {
     fun provideMainViewModelFactory(context: Context): MainViewModelFactory
 }
 
-val injector: ViewModelFactoryProvider
+val Injector: ViewModelFactoryProvider
     get() = currentInjector
 
 @Volatile private var currentInjector: ViewModelFactoryProvider =

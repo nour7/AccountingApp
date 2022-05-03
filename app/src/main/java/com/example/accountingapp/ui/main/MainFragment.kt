@@ -1,12 +1,13 @@
 package com.example.accountingapp.ui.main
 
-import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import androidx.fragment.app.viewModels
 import com.example.accountingapp.R
+import com.example.accountingapp.databinding.MainFragmentBinding
+import com.example.accountingapp.services.Injector
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 class MainFragment : Fragment() {
 
@@ -14,19 +15,50 @@ class MainFragment : Fragment() {
         fun newInstance() = MainFragment()
     }
 
-    private lateinit var viewModel: MainViewModel
+    @OptIn(ExperimentalCoroutinesApi::class, kotlinx.coroutines.FlowPreview::class)
+    private val viewModel: MainViewModel by viewModels {
+        Injector.provideMainViewModelFactory(requireContext())
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.main_fragment, container, false)
+        val binding = MainFragmentBinding.inflate(inflater, container, false)
+        context ?: return binding.root
+
+        val adapter = BudgetAdapter()
+        binding.budgetList.adapter = adapter
+        updateBudgetList(adapter)
+
+        setHasOptionsMenu(true)
+        return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-        // TODO: Use the ViewModel
+    private fun updateBudgetList(adapter: BudgetAdapter) {
+       viewModel.budgetRecords.observe(viewLifecycleOwner) { records ->
+           adapter.submitList(records)
+       }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.budget_menu, menu)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.add_record -> {
+                navigateToAddFragment()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun navigateToAddFragment() {
+
     }
 
 }
