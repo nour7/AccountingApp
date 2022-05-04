@@ -30,4 +30,7 @@ interface RecordsDao {
 
     @Query("Select * from records where id = :id limit 1")
     suspend fun query(id: UUID): Record?
+
+    @Query("Select sum(amount) from records")
+    fun sumAmount(): Flow<Double>
 }

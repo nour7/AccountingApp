@@ -20,5 +20,6 @@ class MainViewModelFactory(
 class MainViewModel internal constructor(
     budgetRepository: BudgetRepository) : ViewModel() {
     val budgetRecords = budgetRepository.recordsFlow.asLiveData()
+    val sumAmount = budgetRepository.amountFlow.asLiveData()
 
 }

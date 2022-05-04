@@ -14,6 +14,7 @@ class BudgetRepository private constructor(
     dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) {
     val recordsFlow = recordsDao.getRecords().flowOn(dispatcher).conflate()
+    val amountFlow = recordsDao.sumAmount().flowOn(dispatcher).conflate()
 
     suspend fun query(id: UUID) = recordsDao.query(id)
     suspend fun addRecord(record: Record) = recordsDao.add(record)

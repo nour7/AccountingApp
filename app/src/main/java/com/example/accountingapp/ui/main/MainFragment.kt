@@ -1,5 +1,6 @@
 package com.example.accountingapp.ui.main
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -20,6 +21,7 @@ class MainFragment : Fragment(), OnBudgetItemClickListener {
     }
 
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -31,6 +33,9 @@ class MainFragment : Fragment(), OnBudgetItemClickListener {
         binding.budgetList.adapter = adapter
         updateBudgetList(adapter)
 
+        viewModel.sumAmount.observe(viewLifecycleOwner) {
+            binding.sumTextView.text = "€${it}"
+        }
 
         setHasOptionsMenu(true)
         return binding.root
