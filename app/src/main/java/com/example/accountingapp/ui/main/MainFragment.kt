@@ -9,7 +9,6 @@ import androidx.navigation.fragment.findNavController
 import com.example.accountingapp.R
 import com.example.accountingapp.databinding.MainFragmentBinding
 import com.example.accountingapp.services.Injector
-import com.example.accountingapp.ui.add.RecordFragmentArgs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import java.util.*
 

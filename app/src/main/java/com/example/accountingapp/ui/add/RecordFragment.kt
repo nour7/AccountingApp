@@ -1,7 +1,6 @@
 package com.example.accountingapp.ui.add
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +13,6 @@ import androidx.navigation.fragment.navArgs
 import com.example.accountingapp.databinding.FragmentRecordsBinding
 import com.example.accountingapp.services.Injector
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import java.util.*
 
 
 class RecordFragment : Fragment() {
