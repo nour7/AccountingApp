@@ -43,7 +43,6 @@ class MainFragment : Fragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-       // menu.clear()
         inflater.inflate(R.menu.budget_menu, menu)
 
     }
