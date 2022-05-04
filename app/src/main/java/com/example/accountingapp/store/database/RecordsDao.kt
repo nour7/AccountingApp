@@ -29,5 +29,5 @@ interface RecordsDao {
     suspend fun update(record: Record): Int
 
     @Query("Select * from records where id = :id limit 1")
-    fun query(id: UUID): Record?
+    suspend fun query(id: UUID): Record?
 }

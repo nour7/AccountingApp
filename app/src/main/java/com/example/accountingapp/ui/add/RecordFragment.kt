@@ -10,15 +10,16 @@ import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.accountingapp.databinding.FragmentRecordsBinding
 import com.example.accountingapp.services.Injector
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.util.*
 
 
 class RecordFragment : Fragment() {
 
-    val recordId: String? = null
-
+    private val args: RecordFragmentArgs by navArgs()
 
     @OptIn(ExperimentalCoroutinesApi::class, kotlinx.coroutines.FlowPreview::class)
     private val viewModel: RecordViewModel by viewModels {
@@ -45,9 +46,8 @@ class RecordFragment : Fragment() {
             binding.saveRecord.isEnabled = viewModel.uiState.value?.savedButtonEnabled ?: false
         }
 
-        if (recordId != null) {
-            viewModel.queryRecord(recordId)
-        }
+
+
 
         viewModel.record.observe(viewLifecycleOwner) { record ->
             if (record != null) {
@@ -69,6 +69,11 @@ class RecordFragment : Fragment() {
     }
 
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        if (args.recordId != null) {
+            viewModel.queryRecord(args.recordId ?: "")
+        }
+    }
 
 
 

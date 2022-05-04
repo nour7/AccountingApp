@@ -1,40 +1,53 @@
 package com.example.accountingapp.ui.main
 
-import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.accountingapp.databinding.ListBudgetItemBinding
 import com.example.accountingapp.store.database.Record
+import java.util.*
 
-class BudgetAdapter: ListAdapter<Record, RecyclerView.ViewHolder>(RecordDiffCallback()) {
+interface OnBudgetItemClickListener {
+    fun onItemClick(id: UUID?)
+}
+
+class BudgetAdapter(val listener: OnBudgetItemClickListener): ListAdapter<Record, RecyclerView.ViewHolder>(RecordDiffCallback()) {
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        Log.v("Tagx", "@bind 1")
         val item = getItem(position)
         (holder as RecordViewHolder).bind(item)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        Log.v("Tagx", "@bind 2")
         return RecordViewHolder(
             ListBudgetItemBinding.inflate(
                 LayoutInflater.from(parent.context), parent, false))
     }
 
-    class RecordViewHolder(
+
+    inner class RecordViewHolder(
         private val binding: ListBudgetItemBinding
-    ) : RecyclerView.ViewHolder(binding.root) {
+    ) : RecyclerView.ViewHolder(binding.root), View.OnClickListener {
+
+        init {
+            itemView.setOnClickListener(this)
+        }
 
         fun bind(item: Record) {
-            Log.v("Tagx", "item $item")
             binding.apply {
                 record = item
                 executePendingBindings()
             }
         }
+
+        override fun onClick(v: View?) {
+            listener.onItemClick( binding.record?.recordId)
+        }
     }
+
+
 }
 
 private class RecordDiffCallback : DiffUtil.ItemCallback<Record>() {

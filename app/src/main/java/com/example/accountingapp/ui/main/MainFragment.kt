@@ -1,7 +1,6 @@
 package com.example.accountingapp.ui.main
 
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -9,9 +8,11 @@ import androidx.navigation.fragment.findNavController
 import com.example.accountingapp.R
 import com.example.accountingapp.databinding.MainFragmentBinding
 import com.example.accountingapp.services.Injector
+import com.example.accountingapp.ui.add.RecordFragmentArgs
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import java.util.*
 
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), OnBudgetItemClickListener {
 
     @OptIn(ExperimentalCoroutinesApi::class, kotlinx.coroutines.FlowPreview::class)
     private val viewModel: MainViewModel by viewModels {
@@ -26,9 +27,10 @@ class MainFragment : Fragment() {
         val binding = MainFragmentBinding.inflate(inflater, container, false)
         context ?: return binding.root
 
-        val adapter = BudgetAdapter()
+        val adapter = BudgetAdapter(this)
         binding.budgetList.adapter = adapter
         updateBudgetList(adapter)
+
 
         setHasOptionsMenu(true)
         return binding.root
@@ -58,7 +60,13 @@ class MainFragment : Fragment() {
     }
 
     private fun navigateToRecordFragment() {
-        findNavController().navigate(R.id.action_mainFragment2_to_recordFragment3)
+        val action = MainFragmentDirections.actionMainFragment2ToRecordFragment3(null)
+        findNavController().navigate(action)
+    }
+
+    override fun onItemClick(id: UUID?) {
+       val action = MainFragmentDirections.actionMainFragment2ToRecordFragment3(id.toString())
+        findNavController().navigate(action)
     }
 
 }
