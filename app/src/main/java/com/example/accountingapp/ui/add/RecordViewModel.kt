@@ -15,8 +15,12 @@ class RecordViewModelFactory(private val budgetRepository: BudgetRepository): Vi
 
 }
 
-data class AddRecordUiState(val errors: List<String> = listOf(),
-                            var completed: Boolean = false)
+data class AddRecordUiState(
+    val amount: String? = null,
+    val errors: List<String> = listOf(),
+    var completed: Boolean = false)
+
+val AddRecordUiState.savedButtonEnabled: Boolean get() = this.amount != null
 
 class RecordViewModel internal constructor(private val budgetRepository: BudgetRepository) : ViewModel() {
     private val _uiState =  MutableStateFlow(AddRecordUiState())
@@ -32,19 +36,22 @@ class RecordViewModel internal constructor(private val budgetRepository: BudgetR
     }
 
     fun addOrEditRecord(record: Record?, amount: String, info: String) {
-        Log.v("Tag", "@1")
         val expenseAmount = validateAmountValue(amount) ?: return
-        Log.v("Tag", "@2")
         when(record) {
             null -> addExpense(expenseAmount, info)
             else -> editExpense(expenseAmount, info, record )
         }
     }
 
+    fun updateAmount(amount: CharSequence?) {
+        _uiState.update {
+            it.copy(amount = if(amount?.isEmpty() == true) null else amount?.toString())
+        }
+    }
+
     private fun addExpense(amount: Double, info: String) {
         viewModelScope.launch {
            val result =  budgetRepository.addRecord(Record(amount = amount, description = info, creationDate = Date(), editDate = Date()))
-            Log.v("Tag", "@result $result")
             when (result.isValid()) {
                true -> setCompleted()
                 else -> throwError("Failed to add record to database!")
@@ -54,7 +61,7 @@ class RecordViewModel internal constructor(private val budgetRepository: BudgetR
 
     private fun editExpense(amount: Double, info: String, oldRecord: Record) {
         viewModelScope.launch {
-            val result =  budgetRepository.editRecord(Record(recordId = oldRecord.recordId, amount = amount, description = info, creationDate = oldRecord?.creationDate, editDate = Date()))
+            val result =  budgetRepository.editRecord(Record(recordId = oldRecord.recordId, amount = amount, description = info, creationDate = oldRecord.creationDate, editDate = Date()))
             when (result.isValid()) {
                 true -> setCompleted()
                 else -> throwError("Failed to edit record!")
@@ -75,5 +82,7 @@ class RecordViewModel internal constructor(private val budgetRepository: BudgetR
 
     private fun setCompleted() = _uiState.update { it.copy(completed = true) }
 
-    private fun throwError(msg: String) = _uiState.update { it.copy(completed = true) }
+    private fun throwError(msg: String) = _uiState.update { it.copy(errors = listOf(msg)) }
+
+
 }

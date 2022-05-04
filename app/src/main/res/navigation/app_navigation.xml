@@ -2,23 +2,22 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/app_navigation"
-    app:startDestination="@id/mainFragment">
-
+    app:startDestination="@id/mainFragment2">
     <fragment
-        android:id="@+id/mainFragment"
+        android:id="@+id/mainFragment2"
         android:name="com.example.accountingapp.ui.main.MainFragment"
         android:label="MainFragment" >
         <action
-            android:id="@+id/action_mainFragment_to_addRecordFragment"
-            app:destination="@id/addRecordFragment" />
-        <argument
-            android:name="recordId"
-            app:argType="string"
-            app:nullable="true"
-            android:defaultValue="null" />
+            android:id="@+id/action_mainFragment2_to_recordFragment3"
+            app:destination="@id/recordFragment3" />
     </fragment>
     <fragment
-        android:id="@+id/addRecordFragment"
+        android:id="@+id/recordFragment3"
         android:name="com.example.accountingapp.ui.add.RecordFragment"
-        android:label="AddRecordFragment" />
+        android:label="RecordFragment" >
+        <argument
+            android:name="record_id"
+            app:argType="string"
+            android:defaultValue="null" />
+    </fragment>
 </navigation>
